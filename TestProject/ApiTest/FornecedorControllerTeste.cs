@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace TestProject.ApiTeste
 {
-    class FornecedorControllerTeste : BaseTest
+    class FornecedorControllerTeste : UnitTest
     {
         private FornecedorController fornecedorController;
         private IRepository<Fornecedor> fornecedorRepository;
@@ -33,10 +33,11 @@ namespace TestProject.ApiTeste
             };
         }
 
+        [NonParallelizable]
         [Test]
-        public async Task CreateFornecedorTest()
+        public void CreateFornecedorTest()
         {
-            await CreateFornecedor();
+             CreateFornecedor();
 
             var fornecedorCreate = fornecedorRepository.Query().FirstOrDefault();
 
@@ -48,24 +49,52 @@ namespace TestProject.ApiTeste
             Assert.IsNull(fornecedorCreate.DataAlteracao);
         }
 
+        [NonParallelizable]
         [Test]
-        public async Task DeleteFornecedorTest()
+        public void ListFornecedorTest()
         {
-            await CreateFornecedor();
+             CreateFornecedor();
+
+            novoFornecedor = new FornecedorDTO
+            {
+                RazaoSocial = "RazaoTeste Segundo",
+                Cnpj = "97848265000186",
+                Uf = "PA",
+                EmailContato = "outro@teste.com",
+                NomeContato = "Outro Test"
+            };
+
+             CreateFornecedor();
+
+            var fornecedores =  fornecedorController.Index().Result;
+
+            var fornecedoresListModel = (List<FornecedorDTO>)((ViewResult)fornecedores).Model;
+
+            var fornecedoresCreate = fornecedorRepository.Query().ToList();
+
+            Assert.AreEqual(fornecedoresCreate.Count, fornecedoresListModel.Count);
+        }
+
+        [NonParallelizable]
+        [Test]
+        public void DeleteFornecedorTest()
+        {
+             CreateFornecedor();
 
             var fornecedorCreate = fornecedorRepository.Query().FirstOrDefault();
 
-            await fornecedorController.DeleteConfirmed(fornecedorCreate.IdFornecedor);
+            _ = fornecedorController.DeleteConfirmed(fornecedorCreate.IdFornecedor);
 
             var fornecedorDelete = fornecedorRepository.Query().FirstOrDefault();
 
             Assert.IsNull(fornecedorDelete);
         }
 
+        [NonParallelizable]
         [Test]
-        public async Task EditFornecedorTest()
+        public void EditFornecedorTest()
         {
-            await CreateFornecedor();
+             CreateFornecedor();
 
             var fornecedorCreateId = fornecedorRepository.Query().FirstOrDefault().IdFornecedor;
 
@@ -79,7 +108,7 @@ namespace TestProject.ApiTeste
                 NomeContato = "Edit"
             };
 
-            await fornecedorController.Edit(fornecedorEditDTO);
+            _ = fornecedorController.Edit(fornecedorEditDTO);
 
             var fornecedorEdit = fornecedorRepository.Query().Where(w => w.IdFornecedor == fornecedorCreateId).FirstOrDefault();
 
@@ -91,31 +120,6 @@ namespace TestProject.ApiTeste
             Assert.IsNotNull(fornecedorEdit.DataAlteracao);
         }
 
-        [Test]
-        public async Task ListFornecedorTest()
-        {
-            await CreateFornecedor();
-
-            novoFornecedor = new FornecedorDTO
-            {
-                RazaoSocial = "RazaoTeste Segundo",
-                Cnpj = "97848265000186",
-                Uf = "PA",
-                EmailContato = "outro@teste.com",
-                NomeContato = "Outro Test"
-            };
-
-            await CreateFornecedor();
-
-            var fornecedores = await fornecedorController.Index();
-
-            var fornecedoresListModel = (List<FornecedorDTO>)((ViewResult)fornecedores).Model;
-
-            var fornecedoresCreate = fornecedorRepository.Query().ToList();
-
-            Assert.AreEqual(fornecedoresCreate.Count, fornecedoresListModel.Count);
-        }
-
-        private async Task CreateFornecedor() => await fornecedorController.CreateAsync(novoFornecedor);
+        private void CreateFornecedor() => fornecedorController.CreateAsync(novoFornecedor).Wait();
     }
 }

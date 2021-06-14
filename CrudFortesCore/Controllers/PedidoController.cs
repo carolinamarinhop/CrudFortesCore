@@ -2,9 +2,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using CrudFortesCore.Data;
-using CrudFortesCore.Models;
 using MediatR;
 using CrudFortesCore.CommandsHandler.Pedido;
 using CrudFortesCore.DTO;
@@ -19,7 +16,10 @@ namespace CrudFortesCore.Controllers
         public PedidoController(IMediator mediator) => _mediator = mediator;
 
         // GET: Pedido
-        public async Task<IActionResult> Index() => View(await _mediator.Send(new ListPedidoCommand()));
+        public async Task<IActionResult> Index() 
+        { 
+            return View(await _mediator.Send(new ListPedidoCommand()));
+        }
 
         // GET: Pedido/Details/5
         public async Task<IActionResult> Details(int id)
@@ -35,7 +35,12 @@ namespace CrudFortesCore.Controllers
             var fornecedores = await _mediator.Send(new ListFornecedorCommand());
             var produtos = await _mediator.Send(new ListProdutoCommand());
             ViewData["IdFornecedor"] = new SelectList(fornecedores, "IdFornecedor", "RazaoSocial");
-            ViewData["IdProduto"] = new SelectList(produtos, "IdProduto", "Descricao");
+            ViewData["IdProduto"] = new SelectList((from p in produtos.ToList()
+                                                    select new
+                                                    {
+                                                        p.IdProduto,
+                                                        Descricao = p.Descricao + " - R$ " + p.Valor.ToString("N2")
+                                                    }), "IdProduto", "Descricao", null);
             return View();
         }
 
@@ -56,7 +61,13 @@ namespace CrudFortesCore.Controllers
             var produtos = await _mediator.Send(new ListProdutoCommand());
 
             ViewData["IdFornecedor"] = new SelectList(fornecedores, "IdFornecedor", "RazaoSocial", pedidoDTO.IdFornecedor);
-            ViewData["IdProduto"] = new SelectList(produtos, "IdProduto", "Descricao", pedidoDTO.IdProduto);
+            ViewData["IdProduto"] = new SelectList((from p in produtos.ToList()
+                                                    select new
+                                                    {
+                                                        p.IdProduto,
+                                                        Descricao = p.Descricao + " - R$ " + p.Valor
+                                                    }), "IdProduto", "Descricao", pedidoDTO.IdProduto);
+
             return View(pedidoDTO);
         }
 
@@ -69,7 +80,12 @@ namespace CrudFortesCore.Controllers
             var produtos = await _mediator.Send(new ListProdutoCommand());
 
             ViewData["IdFornecedor"] = new SelectList(fornecedores, "IdFornecedor", "RazaoSocial", pedido.IdFornecedor);
-            ViewData["IdProduto"] = new SelectList(produtos, "IdProduto", "Descricao", pedido.IdProduto);
+            ViewData["IdProduto"] = new SelectList((from p in produtos.ToList()
+                                                    select new
+                                                    {
+                                                        p.IdProduto,
+                                                        Descricao = p.Descricao + " - R$ " + p.Valor
+                                                    }), "IdProduto", "Descricao", pedido.IdProduto);
 
             return View(pedido);
         }
@@ -90,7 +106,12 @@ namespace CrudFortesCore.Controllers
             var produtos = await _mediator.Send(new ListProdutoCommand());
 
             ViewData["IdFornecedor"] = new SelectList(fornecedores, "IdFornecedor", "RazaoSocial", pedidoDTO.IdFornecedor);
-            ViewData["IdProduto"] = new SelectList(produtos, "IdProduto", "Descricao", pedidoDTO.IdProduto);
+            ViewData["IdProduto"] = new SelectList((from p in produtos.ToList()
+                                                    select new
+                                                    {
+                                                        p.IdProduto,
+                                                        Descricao = p.Descricao + " - R$ " + p.Valor
+                                                    }), "IdProduto", "Descricao", pedidoDTO.IdProduto);
             return View(pedidoDTO);
         }
 

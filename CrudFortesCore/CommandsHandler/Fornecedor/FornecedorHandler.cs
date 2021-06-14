@@ -4,6 +4,7 @@ using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -71,8 +72,10 @@ namespace CrudFortesCore.CommandsHandler.Fornecedor
 
         public Task<Unit> Handle(CreateFornecedorCommand request, CancellationToken cancellationToken)
         {
+            var formatCNPJ = Regex.Replace(request.FornecedorDTO.Cnpj, "[^0-9]", "");
+
             _fornecedorRepository.Create(new Models.Fornecedor(request.FornecedorDTO.RazaoSocial,
-                  request.FornecedorDTO.Cnpj,
+                  request.FornecedorDTO.Cnpj = formatCNPJ,
                   request.FornecedorDTO.Uf,
                   request.FornecedorDTO.EmailContato,
                   request.FornecedorDTO.NomeContato));

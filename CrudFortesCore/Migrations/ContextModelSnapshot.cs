@@ -72,7 +72,7 @@ namespace CrudFortesCore.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("ValorTotal")
-                        .HasColumnType("money");
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("IdPedido");
 
@@ -100,7 +100,7 @@ namespace CrudFortesCore.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Valor")
-                        .HasColumnType("money");
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("IdProduto");
 

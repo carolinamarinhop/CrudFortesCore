@@ -15,12 +15,19 @@ namespace CrudFortesCore.DTO
         [Display(Name = "Data de Cadastro")]
         public DateTime DataCadastro { get; set; }
 
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:c}")]
+        [Column(TypeName = "decimal(18, 2)")]
         [DataType(DataType.Currency)]
-        [Column(TypeName = "money")]
         public decimal Valor { get; set; }
 
         [DataType(DataType.Date)]
         [Display(Name = "Data de Alteração")]
         public DateTime? DataAlteracao { get; set; }
+
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:c}")]
+        [RegularExpression(@"^[\d,.?!]+$")]
+        [Display(Name ="Valor")]
+        [DataType(DataType.Currency)]
+        public string ValorAux { get; set; }
     }
 }

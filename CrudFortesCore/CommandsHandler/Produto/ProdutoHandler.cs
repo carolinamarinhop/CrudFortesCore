@@ -3,6 +3,7 @@ using CrudFortesCore.Repository.Abstract;
 using MediatR;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -34,9 +35,12 @@ namespace CrudFortesCore.CommandsHandler.Produto
 
         public Task<Unit> Handle(CreateProdutoCommand request, CancellationToken cancellationToken)
         {
+            var valorAux = Convert.ToDecimal(request.ProdutoDTO.ValorAux, new CultureInfo("pt-BR"));
+
             _produtoRepository.Create(new Models.Produto(
                 request.ProdutoDTO.Descricao,
-                request.ProdutoDTO.Valor));
+                request.ProdutoDTO.Valor = valorAux,
+                request.ProdutoDTO.DataCadastro = DateTime.Now));
 
             return Task.FromResult(Unit.Value);
         }
@@ -47,7 +51,7 @@ namespace CrudFortesCore.CommandsHandler.Produto
             {
                 IdProduto = produto.IdProduto,
                 Descricao = produto.Descricao,
-                Valor = produto.Valor,
+                ValorAux = produto.Valor.ToString("N2"),
                 DataCadastro = produto.DataCadastro,
                 DataAlteracao = produto.DataAlteracao
             }).FirstOrDefault());
@@ -62,9 +66,11 @@ namespace CrudFortesCore.CommandsHandler.Produto
         public Task<Unit> Handle(EditProdutoCommand request, CancellationToken cancellationToken)
         {
             var produto = _produtoRepository.Find(request.ProdutoDTO.IdProduto);
+            var valorAux = Convert.ToDecimal(request.ProdutoDTO.ValorAux, new CultureInfo("pt-BR"));
 
             produto.Descricao = request.ProdutoDTO.Descricao;
-            produto.Valor = request.ProdutoDTO.Valor;
+            produto.Valor = valorAux;
+            produto.DataAlteracao = DateTime.Now;
             _produtoRepository.Edit(produto);
 
             return Task.FromResult(Unit.Value);

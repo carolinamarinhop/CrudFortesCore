@@ -49,7 +49,8 @@ namespace CrudFortesCore.CommandsHandler.Pedido
             _pedidoRepository.Create(new Models.Pedido(request.PedidoDTO.IdFornecedor,
                 request.PedidoDTO.IdProduto,
                 request.PedidoDTO.QtdPedido,
-                request.PedidoDTO.ValorTotal = request.PedidoDTO.QtdPedido * produto.Valor));
+                request.PedidoDTO.ValorTotal = request.PedidoDTO.QtdPedido * produto.Valor,
+                request.PedidoDTO.DataPedido = DateTime.Now));
 
             return Task.FromResult(Unit.Value);
         }

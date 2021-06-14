@@ -6,13 +6,13 @@ namespace CrudFortesCore.Models
 {
     public class Pedido
     {
-        public Pedido(int idFornecedor, int idProduto, int qtdPedido, decimal valorTotal)
+        public Pedido(int idFornecedor, int idProduto, int qtdPedido, decimal valorTotal, DateTime dataPedido)
         {
             IdFornecedor = idFornecedor;
             IdProduto = idProduto;
             QtdPedido = qtdPedido;
             ValorTotal = valorTotal;
-            DataPedido = DateTime.Now;
+            DataPedido = dataPedido;
         }
 
         [Key]
@@ -35,8 +35,12 @@ namespace CrudFortesCore.Models
 
         public Fornecedor Fornecedor { get; set; }
 
+        //[DisplayFormat(DataFormatString = "{0:C}")]
+        //[DataType(DataType.Currency)]
+        //[Column(TypeName = "money")]
+        [Range(1, 100)]
         [DataType(DataType.Currency)]
-        [Column(TypeName = "money")]
+        [Column(TypeName = "decimal(18, 2)")]
         [Display(Name = "Valor Total")]
         public decimal ValorTotal { get; set; }
 

@@ -14,9 +14,9 @@ using System.Reflection;
 
 namespace TestProject
 {
-    public abstract class BaseTest
+    public abstract class UnitTest
     {
-        protected static Container container = new();
+        protected static Container container;
         protected Scope containerScope;
 
         protected IContext context;
@@ -24,10 +24,10 @@ namespace TestProject
         [SetUp]
         public virtual void InitTeste()
         {
-            container.Options.DefaultScopedLifestyle = new AsyncScopedLifestyle();
-
-
+            container = new Container();
             containerScope = AsyncScopedLifestyle.BeginScope(container);
+
+            container.Options.DefaultScopedLifestyle = new AsyncScopedLifestyle();
 
             container.Register(typeof(IRepository<>), typeof(Repository<>), Lifestyle.Scoped);
             container.Options.AllowOverridingRegistrations = true;
@@ -46,7 +46,7 @@ namespace TestProject
             container.Register<IContext>(() => new Context(optionsBuilder.Options));
 
             context = container.GetInstance<IContext>();
-            context.Database.EnsureDeleted();
+            //context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
             context.Database.BeginTransaction();
         }
@@ -57,6 +57,7 @@ namespace TestProject
             context?.Database.RollbackTransaction();
             containerScope.Dispose();
             container.Dispose();
+            context.Database.EnsureDeleted();
         }
 
         private static IEnumerable<Assembly> GetAssemblies()

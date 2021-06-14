@@ -20,7 +20,7 @@ namespace CrudFortesCore.DTO
 
         public virtual Produto Produto { get; set; }
 
-        [Display(Name = "Quantidade Pedido")]
+        [Display(Name = "Quantidade")]
         public int QtdPedido { get; set; }
 
         public int IdFornecedor { get; set; }

@@ -6,11 +6,11 @@ namespace CrudFortesCore.Models
 {
     public class Produto
     {
-        public Produto(string descricao, decimal valor)
+        public Produto(string descricao, decimal valor, DateTime dataCadastro)
         {
             Descricao = descricao;
             Valor = valor;
-            DataCadastro = DateTime.Now;
+            DataCadastro = dataCadastro;
         }
 
         [Key]
@@ -23,8 +23,9 @@ namespace CrudFortesCore.Models
         [Display(Name = "Data de Cadastro")]
         public DateTime DataCadastro { get; set; }
 
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:c}")]
+        [Column(TypeName = "decimal(18, 2)")]
         [DataType(DataType.Currency)]
-        [Column(TypeName = "money")]
         public decimal Valor { get; set; }
 
         [DataType(DataType.Date)]

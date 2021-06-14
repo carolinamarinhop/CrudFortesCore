@@ -12,6 +12,8 @@ using MediatR;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 namespace CrudFortesCore
 {
@@ -111,8 +113,28 @@ namespace CrudFortesCore
                     name: "default",
                     template: "{controller=Fornecedor}/{action=Index}/{id?}");
             });
-        }
 
-        
+            // Setting the default culture: pt-BR
+            var defaultDateCulture = "pt-BR";
+
+            // Formatter number
+            var ci = new CultureInfo(defaultDateCulture);
+            ci.NumberFormat.NumberDecimalSeparator = ".";
+            ci.NumberFormat.CurrencyDecimalSeparator = ".";
+
+            // Configure the Localization middleware
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture(ci),
+                SupportedCultures = new List<CultureInfo>
+                {
+                     ci,
+                },
+                        SupportedUICultures = new List<CultureInfo>
+                {
+                     ci,
+                }
+            });
+        }
     }
 }

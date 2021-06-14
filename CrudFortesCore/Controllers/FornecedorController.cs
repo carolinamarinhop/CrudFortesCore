@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using CrudFortesCore.Data;
 using CrudFortesCore.DTO;
 using MediatR;
 using CrudFortesCore.CommandsHandler.Fornecedor;

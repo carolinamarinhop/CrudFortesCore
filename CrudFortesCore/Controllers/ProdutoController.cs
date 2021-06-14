@@ -1,9 +1,5 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using CrudFortesCore.Data;
-using CrudFortesCore.Models;
 using MediatR;
 using CrudFortesCore.CommandsHandler.Produto;
 using CrudFortesCore.DTO;
@@ -29,13 +25,15 @@ namespace CrudFortesCore.Controllers
         // GET: Produto/Create
         public IActionResult Create() => View();
 
+
         // POST: Produto/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdProduto,Descricao,DataCadastro,Valor,DataAlteracao")] ProdutoDTO produtoDTO)
+        public async Task<IActionResult> Create([Bind("IdProduto,Descricao,DataCadastro,Valor,DataAlteracao, ValorAux")] ProdutoDTO produtoDTO)
         {
+
             if (!ModelState.IsValid)
                 return View(produtoDTO);
 
@@ -56,12 +54,10 @@ namespace CrudFortesCore.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit([Bind("IdProduto,Descricao,DataCadastro,Valor,DataAlteracao")] ProdutoDTO produtoDTO)
+        public async Task<IActionResult> Edit([Bind("IdProduto,Descricao,DataCadastro,Valor,DataAlteracao, ValorAux")] ProdutoDTO produtoDTO)
         {
             if (!ModelState.IsValid)
-            {
                 return View(produtoDTO);
-            }
 
             await _mediator.Send(new EditProdutoCommand(produtoDTO));
             return RedirectToAction(nameof(Index));
