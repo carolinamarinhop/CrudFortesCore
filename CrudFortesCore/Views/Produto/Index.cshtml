@@ -1,0 +1,54 @@
+﻿@model IEnumerable<CrudFortesCore.DTO.ProdutoDTO>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Produtos</h1>
+
+<p>
+    <a asp-action="Create">Criar novo Produto</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Descricao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataCadastro)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Valor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataAlteracao)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descricao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataCadastro)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Valor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataAlteracao)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.IdProduto">Editar</a> |
+                <a asp-action="Details" asp-route-id="@item.IdProduto">Detalhar</a> |
+                <a asp-action="Delete" asp-route-id="@item.IdProduto">Deletar</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

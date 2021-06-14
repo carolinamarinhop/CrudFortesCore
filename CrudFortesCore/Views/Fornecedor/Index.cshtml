@@ -1,0 +1,61 @@
+﻿@model IEnumerable<CrudFortesCore.DTO.FornecedorDTO>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Fornecedores</h1>
+
+<p>
+    <a asp-action="Create">Criar novo Fornecedor</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.RazaoSocial)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cnpj)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Uf)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmailContato)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NomeContato)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.RazaoSocial)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cnpj)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Uf)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmailContato)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NomeContato)
+            </td>
+            
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.IdFornecedor">Editar</a> |
+                <a asp-action="Details" asp-route-id="@item.IdFornecedor">Detalhar</a> |
+                <a asp-action="Delete" asp-route-id="@item.IdFornecedor">Deletar</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
